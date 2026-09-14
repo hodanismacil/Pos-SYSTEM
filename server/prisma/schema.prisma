@@ -1,0 +1,197 @@
+datasource db {
+  provider = "postgresql" // Ama mysql, sqlite, etc.
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  CASHIER
+  USER
+}
+
+enum PaymentMethod {
+  CASH
+  ZAAD
+  EDAHAB
+  SAHAL
+  EVC
+  CARD
+  
+  
+}
+
+enum SaleStatus {
+  COMPLETED
+  VOIDED
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+  role     Role   @default(USER)
+
+  sales Sale[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id      Int     @id @default(autoincrement())
+  name    String
+  sku     String? @unique
+  barcode String? @unique
+
+  price Float
+  stock Int
+
+  description String?
+  imageUrl    String?
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  saleItems      SaleItem[]
+  stockHistories StockHistory[]
+  purchaseItems  PurchaseItem[] // Kan waa sax
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Customer {
+  id          Int    @id @default(autoincrement())
+  name        String
+  phoneNumber String @unique
+  
+  sales Sale[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Sale {
+  id            Int          @id @default(autoincrement())
+  invoiceNumber String?      @unique @default(uuid()) // <-- '?' ayaa lagu daray si uusan error u bixin
+  status        SaleStatus   @default(COMPLETED)
+
+  userId        Int
+  user          User         @relation(fields: [userId], references: [id])
+
+  customerId    Int?
+  customer      Customer?    @relation(fields: [customerId], references: [id])
+
+  paymentMethod PaymentMethod
+  totalAmount   Float
+  discount      Float        @default(0)
+  paidAmount    Float
+  changeAmount  Float
+
+  saleItems     SaleItem[]
+
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+model SaleItem {
+  id Int @id @default(autoincrement())
+
+  saleId Int
+  sale   Sale @relation(fields: [saleId], references: [id])
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  productName String
+  quantity    Int
+  price       Float
+  subTotal    Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StockHistory {
+  id Int @id @default(autoincrement())
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  change Int
+  reason String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StoreSettings {
+  id            Int     @id @default(autoincrement())
+  storeName     String
+  phone         String?
+  address       String?
+  currency      String  @default("USD")
+  tax           Float   @default(0)
+  receiptFooter String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Supplier {
+  id          Int     @id @default(autoincrement())
+  name        String
+  phoneNumber String?
+  email       String?
+  address     String?
+
+  purchases Purchase[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Purchase {
+  id Int @id @default(autoincrement())
+
+  supplierId Int
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
+
+  totalAmount Float
+
+  purchaseItems PurchaseItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PurchaseItem {
+  id Int @id @default(autoincrement())
+
+  purchaseId Int
+  purchase   Purchase @relation(fields: [purchaseId], references: [id])
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  productName String
+  quantity    Int
+  price       Float
+  subTotal    Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
