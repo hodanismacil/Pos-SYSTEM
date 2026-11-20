@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Lock, Mail, Loader2 } from "lucide-react";
+
+import { Eye, EyeOff,  } from "lucide-react";
 import api from "../api/api";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -86,7 +89,7 @@ export default function LoginPage() {
             <div className="relative">
               <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -97,10 +100,11 @@ export default function LoginPage() {
           </div>
 
           <button
-            type="submit"
-            disabled={loading}
+            type="submit" 
+            onClick={() =>setShowPassword(!showPassword)}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-purple-600 py-2.5 text-sm font-semibold text-white transition hover:bg-purple-500 disabled:opacity-50"
           >
+            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Log In"}
           </button>
         </form>
