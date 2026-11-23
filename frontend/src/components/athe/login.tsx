@@ -47,7 +47,7 @@ export default function LoginPage() {
     } catch (err: any) {
       console.error("Login Error:", err);
       setError(
-        err.response?.data?.message || "Email ama Password khaldan, fadlan dib u fiiri."
+        err.response?.data?.message || "in correct email or password. Please try again."
       );
     } finally {
       setLoading(false);
@@ -59,7 +59,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#101631] p-8 shadow-2xl">
         <div className="mb-6 text-center">
           <h1 className="text-2xl font-bold text-white">POS System</h1>
-          <p className="mt-1 text-sm text-slate-400">Geli xogtaada si aad u gasho terminal-ka</p>
+          <p className="mt-1 text-sm text-slate-400">Log in to your account</p>
         </div>
 
         {error && (
@@ -78,7 +78,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
+                placeholder="email"
                 className="w-full rounded-xl border border-white/10 bg-slate-900/50 py-2.5 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:border-purple-500 focus:outline-none"
               />
             </div>
