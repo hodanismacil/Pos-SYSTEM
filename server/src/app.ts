@@ -16,12 +16,14 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Port-ka React (Vite)
+    origin: [
+      "http://localhost:5173",
+      "https://pos-system-orcin-ten.vercel.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true, // Si uu u ogolaado headers & cookies
   })
 );
-// Middleware
 app.use(express.json());
  app.use("/api/users", userRoutes);
  app.use("/api/categories", categoryRoutes );
