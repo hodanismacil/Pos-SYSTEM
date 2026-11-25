@@ -2,30 +2,29 @@ import axios from "axios";
 
 
 
- const api = axios.create({
-  baseURL: "https://hodan-pos-system.onrender.com",
+
+
+const api = axios.create({
+  baseURL: "https://hodan-pos-system.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },
 });
+
 api.interceptors.request.use(
   (config) => {
-    // Hubi key-ga aad token-ka ku kaydisay marka aad login-ka samaynaysay
-    const token = localStorage.getItem("token") || localStorage.getItem("accessToken"); 
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("accessToken");
 
-    console.log("Token-ka baxaaya waa:", token); // <-- Fiiri Console-ka si aad u aqoonsato
+    console.log("Token-ka baxaaya waa:", token);
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
 
     return config;
   },
   (error) => Promise.reject(error)
 );
-
-
-
 
 export default api;
