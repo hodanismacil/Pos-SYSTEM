@@ -3,12 +3,11 @@ import axios from "axios";
 
 
  const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://hodan-pos-system.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
 });
-
 api.interceptors.request.use(
   (config) => {
     // Hubi key-ga aad token-ka ku kaydisay marka aad login-ka samaynaysay
