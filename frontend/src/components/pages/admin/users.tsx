@@ -60,7 +60,7 @@ const Users = () => {
     try {
       setLoading(true);
       setError("");
-      const response = await axios.get(API_URL, getConfig());
+     const response = await axios.get(`${API_URL}/users`, getConfig());
       if (response.data.success) {
         setUsers(response.data.data);
       }
