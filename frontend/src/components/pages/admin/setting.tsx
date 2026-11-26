@@ -18,7 +18,7 @@ const DEFAULT_SETTINGS: SettingsData = {
   receiptFooter: "Thank you for your business!",
 };
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "https://hodan-pos-system.onrender.com/api";
 
 const Settings = () => {
   const [settings, setSettings] =

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Search, Plus, Edit2, Trash2, X, ShieldAlert, CheckCircle2 } from "lucide-react";
 
-const API_URL = "http://localhost:5000/api/users";
+const API_URL = "https://hodan-pos-system.onrender.com/api";
 
 type Role = "ADMIN" | "CASHIER" | "USER";
 

@@ -67,7 +67,7 @@ interface ApiResponse<T> {
   message?: string;
 }
 
-const API_URL = "http://localhost:5000/api";
+const API_URL ="https://hodan-pos-system.onrender.com/api";
 
 export default function SalesHistory() {
   const [sales, setSales] = useState<Sale[]>([]);
