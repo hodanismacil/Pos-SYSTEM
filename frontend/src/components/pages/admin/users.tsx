@@ -31,6 +31,7 @@ const Users = () => {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
 
   const [showPassword, setShowPassword] = useState(false);
@@ -270,100 +271,108 @@ const Users = () => {
           </div>
         )}
       </div>
+       
+     {showModal && (
+  <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div className="bg-[#0f172a] border border-white/10 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden">
+      
+      {/* HEADER */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 shrink-0">
+        <h2 className="text-lg font-bold text-white">
+          {editingUser ? "Edit User" : "Add New User"}
+        </h2>
+        <button type="button" onClick={closeModal} className="text-slate-400 hover:text-white">
+          <X size={20} />
+        </button>
+      </div>
 
-      (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-[#0f172a] border border-white/10 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-            
-            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-              <h2 className="text-lg font-bold text-white">
-                {editingUser ? "Edit User" : "Add New User"}
-              </h2>
-              <button onClick={closeModal} className="text-slate-400 hover:text-white">
-                <X size={20} />
+      {/* FORM (SCROLLABLE IF NEEDED) */}
+      <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto">
+        <div>
+          <label className="block text-xs font-medium text-slate-400 mb-1">Full Name</label>
+          <input
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            className="w-full h-11 bg-white/5 border border-white/10 rounded-xl px-4 text-sm text-white focus:outline-none focus:border-purple-500/50"
+            placeholder="Enter name"
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-slate-400 mb-1">Email Address</label>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            className="w-full h-11 bg-white/5 border border-white/10 rounded-xl px-4 text-sm text-white focus:outline-none focus:border-purple-500/50"
+            placeholder="Enter email"
+          />
+        </div>
+
+        {!editingUser && (
+          <div>
+            <label className="block text-xs font-medium text-slate-400 mb-1">Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                className="w-full h-11 bg-white/5 border border-white/10 rounded-xl pl-4 pr-11 text-sm text-white focus:outline-none focus:border-purple-500/50"
+                placeholder="Enter password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
+          </div>
+        )}
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1">Full Name</label>
-                <input
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  className="w-full h-11 bg-white/5 border border-white/10 rounded-xl px-4 text-sm text-white focus:outline-none focus:border-purple-500/50"
-                  placeholder="Enter name"
-                />
-              </div>
+        <div>
+          <label className="block text-xs font-medium text-slate-400 mb-1">Role</label>
+          <select
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+            className="w-full h-11 bg-[#0f172a] border border-white/10 rounded-xl px-4 text-sm text-white focus:outline-none focus:border-purple-500/50"
+          >
+            <option value="USER">USER</option>
+            <option value="CASHIER">CASHIER</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+        </div>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1">Email Address</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  className="w-full h-11 bg-white/5 border border-white/10 rounded-xl px-4 text-sm text-white focus:outline-none focus:border-purple-500/50"
-                  placeholder="Enter email"
-                />
-              </div>
-
-              {!editingUser && (
-                <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Password</label>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="password "
-                    value={form.password}
-                    onChange={handleChange}
-                    className="w-full h-11 bg-white/5 border border-white/10 rounded-xl px-4 text-sm text-white focus:outline-none focus:border-purple-500/50"
-                    placeholder="Enter password"
-                  />
-                </div>
-              )}
-
-              <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1">Role</label>
-                <select
-                  name="role"
-                  value={form.role}
-                  onChange={handleChange}
-                  className="w-full h-11 bg-[#0f172a] border border-white/10 rounded-xl px-4 text-sm text-white focus:outline-none focus:border-purple-500/50"
-                >
-                  <option value="USER">USER</option>
-                  <option value="CASHIER">CASHIER</option>
-                  <option value="ADMIN">ADMIN</option>
-                </select>
-              </div>
-
-              <div>
-    <label className="block text-xs font-medium text-slate-400 mb-1">Password</label>
-    <div className="relative">
-      <input
-        type={showPassword ? "text" : "password"}
-        name="password"
-        value={form.password}
-        onChange={handleChange}
-        className="w-full h-11 bg-white/5 border border-white/10 rounded-xl pl-4 pr-11 text-sm text-white focus:outline-none focus:border-purple-500/50"
-        placeholder="Enter password"
-      />
-      <button
-        type="button"
-        onClick={() => setShowPassword((prev) => !prev)}
-        aria-label={showPassword ? "Hide password" : "Show password"}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition"
-      >
-        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-      </button>
+        {/* FOOTER BUTTONS */}
+        <div className="flex justify-end gap-3 pt-4">
+          <button
+            type="button"
+            onClick={closeModal}
+            className="px-4 py-2.5 border border-white/10 rounded-xl text-sm text-slate-300 hover:bg-white/5"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={saving}
+            className="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-sm font-medium transition disabled:opacity-50"
+          >
+            {saving ? "Saving..." : editingUser ? "Update User" : "Save User"}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
-            </form>
-          </div>
-        </div>
-      )
+)}
+
 
     </div>
   );
-};
+}
 
 export default Users;
