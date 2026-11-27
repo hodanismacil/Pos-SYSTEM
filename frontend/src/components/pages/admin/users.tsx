@@ -56,25 +56,7 @@ const Users = () => {
     };
   };
 
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      setError("");
-     const response = await axios.get(`${API_URL}/users`, getConfig());
-      if (response.data.success) {
-        setUsers(response.data.data);
-      }
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Error fetching users");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
+  
   const openAddModal = () => {
     setEditingUser(null);
     setForm({ name: "", email: "", password: "", role: "USER" });
