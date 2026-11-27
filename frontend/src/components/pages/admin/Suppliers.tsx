@@ -30,7 +30,7 @@ const getAuthHeader = () => {
   return { headers: { Authorization: `Bearer ${token}` } };
 };
 
-const API_BASE_URL = "http://localhost:5000/api/suppliers";
+const API_BASE_URL = "https://hodan-pos-system.onrender.com/api";
 
 export const Suppliers: React.FC = () => {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);

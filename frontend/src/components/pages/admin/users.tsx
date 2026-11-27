@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Search, Plus, Edit2, Trash2, X, ShieldAlert, CheckCircle2 } from "lucide-react";
+import { Search, Plus, Edit2, Trash2, X, ShieldAlert, CheckCircle2, EyeOff, Eye } from "lucide-react";
 
 const API_URL = "https://hodan-pos-system.onrender.com/api";
 
@@ -32,7 +32,8 @@ const Users = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const [showModal, setShowModal] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
 
   const [form, setForm] = useState<UserForm>({
@@ -56,13 +57,29 @@ const Users = () => {
     };
   };
 
-  
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API_URL}/users`, getConfig());
+      const data = Array.isArray(res.data) ? res.data : res.data.users || [];
+      setUsers(data);
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Failed to load users");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
   const openAddModal = () => {
     setEditingUser(null);
     setForm({ name: "", email: "", password: "", role: "USER" });
     setError("");
     setSuccess("");
-    setShowModal(true);
+  
   };
 
   const openEditModal = (user: User) => {
@@ -70,12 +87,12 @@ const Users = () => {
     setForm({ name: user.name, email: user.email, password: "", role: user.role });
     setError("");
     setSuccess("");
-    setShowModal(true);
+  
   };
 
   const closeModal = () => {
     if (saving) return;
-    setShowModal(false);
+   
     setEditingUser(null);
   };
 
@@ -96,7 +113,7 @@ const Users = () => {
 
       if (editingUser) {
         await axios.put(
-          `${API_URL}/${editingUser.id}`,
+          `${API_URL}/users/${editingUser.id}`,
           { name: form.name, email: form.email, role: form.role },
           getConfig()
         );
@@ -106,7 +123,7 @@ const Users = () => {
         if (form.password.length < 6) return setError("Password must be at least 6 characters");
 
         await axios.post(
-          API_URL,
+          `${API_URL}/users`,
           { name: form.name, email: form.email, password: form.password, role: form.role },
           getConfig()
         );
@@ -115,7 +132,7 @@ const Users = () => {
 
       await fetchUsers();
       setTimeout(() => {
-        setShowModal(false);
+     
         setEditingUser(null);
         setSuccess("");
       }, 700);
@@ -132,7 +149,7 @@ const Users = () => {
     try {
       setError("");
       setSuccess("");
-      await axios.delete(`${API_URL}/${id}`, getConfig());
+      await axios.delete(`${API_URL}/users/${id}`, getConfig());
       setUsers((prev) => prev.filter((user) => user.id !== id));
       setSuccess("User deleted successfully");
     } catch (err: any) {
@@ -254,8 +271,7 @@ const Users = () => {
         )}
       </div>
 
-      {/* MODAL */}
-      {showModal && (
+      (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-[#0f172a] border border-white/10 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             
@@ -296,8 +312,8 @@ const Users = () => {
                 <div>
                   <label className="block text-xs font-medium text-slate-400 mb-1">Password</label>
                   <input
-                    type="password"
-                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    name="password "
                     value={form.password}
                     onChange={handleChange}
                     className="w-full h-11 bg-white/5 border border-white/10 rounded-xl px-4 text-sm text-white focus:outline-none focus:border-purple-500/50"
@@ -320,26 +336,31 @@ const Users = () => {
                 </select>
               </div>
 
-              <div className="flex justify-end gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="px-4 py-2.5 border border-white/10 rounded-xl text-sm text-slate-300 hover:bg-white/5"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-sm font-medium transition disabled:opacity-50"
-                >
-                  {saving ? "Saving..." : editingUser ? "Update User" : "Save User"}
-                </button>
-              </div>
+              <div>
+    <label className="block text-xs font-medium text-slate-400 mb-1">Password</label>
+    <div className="relative">
+      <input
+        type={showPassword ? "text" : "password"}
+        name="password"
+        value={form.password}
+        onChange={handleChange}
+        className="w-full h-11 bg-white/5 border border-white/10 rounded-xl pl-4 pr-11 text-sm text-white focus:outline-none focus:border-purple-500/50"
+        placeholder="Enter password"
+      />
+      <button
+        type="button"
+        onClick={() => setShowPassword((prev) => !prev)}
+        aria-label={showPassword ? "Hide password" : "Show password"}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition"
+      >
+        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+      </button>
+    </div>
+  </div>
             </form>
           </div>
         </div>
-      )}
+      )
 
     </div>
   );
