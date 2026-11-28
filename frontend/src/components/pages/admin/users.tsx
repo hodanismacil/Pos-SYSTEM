@@ -281,7 +281,7 @@ const Users = () => {
         <h2 className="text-lg font-bold text-white">
           {editingUser ? "Edit User" : "Add New User"}
         </h2>
-        <button type="button" onClick={closeModal} className="text-slate-400 hover:text-white">
+        <button type="submit" onClick={closeModal} className="text-slate-400 hover:text-white">
           <X size={20} />
         </button>
       </div>
