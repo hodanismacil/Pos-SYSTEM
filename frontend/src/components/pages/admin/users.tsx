@@ -62,8 +62,10 @@ const Users = () => {
     try {
       setLoading(true);
       const res = await axios.get(`${API_URL}/users`, getConfig());
-      const data = Array.isArray(res.data) ? res.data : res.data.users || [];
-      setUsers(data);
+      const data = Array.isArray(res.data)
+  ? res.data
+  : res.data.users || res.data.data || [];
+setUsers(data);
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to load users");
     } finally {
@@ -99,7 +101,7 @@ const Users = () => {
     setEditingUser(null);
     setShowModal(false);
   };
-  
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
