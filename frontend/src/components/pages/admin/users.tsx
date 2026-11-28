@@ -43,20 +43,24 @@ const Users = () => {
     password: "",
     role: "USER",
   });
+const getToken = () => {
+  const token =
+    localStorage.getItem("token") || localStorage.getItem("accessToken");
+  if (!token || token === "null" || token === "undefined") {
+    return "";
+  }
+  return token;
+};
 
-  const getToken = () => {
-    return localStorage.getItem("token") || localStorage.getItem("accessToken");
-  };
-
-  const getConfig = () => {
-    const token = getToken();
-    return {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    };
-  };
+const getConfig = () => {
+  const token = getToken();
+  return {
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      "Content-Type": "application/json",
+    },
+  }; 
+};
 
   const fetchUsers = async () => {
   try {
