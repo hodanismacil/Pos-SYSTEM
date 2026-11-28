@@ -59,19 +59,21 @@ const Users = () => {
   };
 
   const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      const res = await axios.get(`${API_URL}/users`, getConfig());
-      const data = Array.isArray(res.data)
-  ? res.data
-  : res.data.users || res.data.data || [];
-setUsers(data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to load users");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+    const res = await axios.get(`${API_URL}/users`, getConfig());
+    console.log("GET /users response:", res.data);
+    const data = Array.isArray(res.data)
+      ? res.data
+      : res.data.users || res.data.data || [];
+    setUsers(data);
+  } catch (err: any) {
+    console.log("GET /users error:", err.response?.data || err.message);
+    setError(err.response?.data?.message || "Failed to load users");
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchUsers();
