@@ -80,6 +80,7 @@ const Users = () => {
     setForm({ name: "", email: "", password: "", role: "USER" });
     setError("");
     setSuccess("");
+    setShowModal(true);
   
   };
 
@@ -88,6 +89,7 @@ const Users = () => {
     setForm({ name: user.name, email: user.email, password: "", role: user.role });
     setError("");
     setSuccess("");
+    setShowModal(true);
   
   };
 
@@ -95,7 +97,9 @@ const Users = () => {
     if (saving) return;
    
     setEditingUser(null);
+    setShowModal(false);
   };
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
